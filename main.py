@@ -74,6 +74,13 @@ class Matrix:
     def transpose(self):
         return Matrix([*zip(*self.matrix)])
 
+    def det(self):
+        if self.rows != self.cols:
+            return None
+        if self.rows == 1:
+            return self.matrix[0][0]
+        return sum(((-(r & 1) << 1) + 1) * self.matrix[r][0] * Matrix([*map(lambda row: row[1:], self.matrix[:r]), *map(lambda row: row[1:], self.matrix[r + 1:])]).det() for r in range(self.rows))
+
     def row_space_basis(self):
         return Basis(self, Basis.ROW)
 
@@ -127,11 +134,19 @@ class Basis:
 
 
 def main():
-    a = Matrix([[1, 4, 15],
-                [4, -3, 22]])
-    b = Matrix([[-3],
-                [5]])
-    print(a.ref())
+    a = Matrix([[-3, 4, -5, 22],
+                [-3, 3, 2, -10]])
+    b = Matrix([[-9, 7, -4, -2],
+                [-2, 3, -4, -3],
+                [9, 8, -3, -6],
+                [2, -7, -2, 1]])
+    c = Matrix([[1, 4, 5, 69, 1],
+                [9, 6, 2, 2, 3],
+                [4, 5, 6, 11, 15],
+                [14, 3, 4, 41, 23],
+                [34, 52, 1, 16, 7]])
+    print(c)
+    print(c.det())
 
 
 if __name__ == '__main__':
